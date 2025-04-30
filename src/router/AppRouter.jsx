@@ -10,6 +10,7 @@ import CatalogoPage from '../pages/CatalogoPage';
 import VideojuegoForm from '../components/VideojuegoForm';
 import {VideojuegoProvider} from '../context/VideojuegoContext';
 import Header from '../components/Header';
+import Footer from '../components/Footer';
 
 
 import { FavoritesProvider } from '../context/FavoritesContext';
@@ -65,7 +66,8 @@ const AppRouter = () => {
                             
 
                         </Routes>
-
+                        
+                        <Footer />
                     </FavoritesProvider> 
                 </VideojuegoProvider>
             </AuthProvider>
