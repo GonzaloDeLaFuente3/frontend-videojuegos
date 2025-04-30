@@ -1,36 +1,132 @@
+/* eslint-disable no-unused-vars */
 // src/components/Header.jsx
-import React from 'react';
-import { useLocation } from 'react-router-dom';
-import { Link } from 'react-router-dom';
-import logo from "../assets/logo.png"; // logo
+import React, { useState, useEffect } from 'react';
+import { useLocation, Link, useNavigate } from 'react-router-dom';
+import { motion, useAnimation } from 'framer-motion';
+import {
+  PlusCircle,
+  Gamepad2,
+  UserRound,
+  Heart,
+  LogOut
+} from 'lucide-react';
+import logo from "../assets/logo.png";
+import FavoritesModal from './FavoritesModal';
+import { useAuth } from '../context/AuthContext';
 
 const Header = () => {
   const location = useLocation();
   const { state } = location;
-  const perfil = state?.profile; // Obtiene el perfil del estado de navegación
+  const perfil = state?.profile;
+  const [showFavoritesModal, setShowFavoritesModal] = useState(false);
+  const controls = useAnimation();
+  const navigate = useNavigate();
+
+  const isCatalogoPage = location.pathname.startsWith('/catalogo/');
+  const isPerfilesPage = location.pathname === '/perfiles';
+  const isLoginPage = location.pathname === '/login';
+  const isRegisterPage = location.pathname === '/register';
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      controls.start({ rotate: 360, transition: { duration: 1 } })
+        .then(() => controls.set({ rotate: 0 }));
+    }, 6000);
+
+    return () => clearInterval(interval);
+  }, [controls]);
+
+  const IconButton = ({ to, state, icon: Icon, label }) => (
+    <Link
+      to={to}
+      state={state}
+      className="inline-flex items-center gap-2 bg-blue-500 text-white px-4 py-2 rounded-xl shadow-md hover:bg-gradient-to-r hover:from-blue-500 hover:to-blue-700 transition-all duration-300 ease-in-out"
+    >
+      <Icon size={18} />
+      <span>{label}</span>
+    </Link>
+  );
+
+  const { logout } = useAuth();//  Obtenemos la función de cierre de sesión del contexto de autenticación
+
+  const handleLogout = () => {
+    logout();  // Limpia sesión y redirige automáticamente
+  };
 
   return (
-    <header className="bg-gray-800 text-white p-4 flex justify-between items-center">
-      <div className="flex items-center">
-        <img src={logo} alt="Logo" className="w-10 h-10 mr-2" />
-        <h1 className="text-2xl font-bold">NodoGames</h1>
-      </div>
-      <nav>
-        {perfil && (perfil.tipo === 'adulto' || perfil.tipo === 'adolescente') && (
-          <>
-            <Link
+    <motion.header
+      initial={{ y: -80, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ duration: 0.5, ease: 'easeOut' }}
+      className="bg-gray-900 text-white px-6 py-4 shadow-md sticky top-0 z-50"
+    >
+      <div className="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
+        {/* Logo y título */}
+        <div className="flex items-center gap-3">
+          <motion.img
+            src={logo}
+            alt="Logo"
+            className="w-10 h-10"
+            animate={controls}
+          />
+          <h1 className="text-2xl font-bold tracking-tight text-white">NodoGames</h1>
+        </div>
+
+        {/* Navegación */}
+        <nav className="flex flex-wrap gap-3 items-center justify-center">
+          {perfil && (perfil.tipo === 'adulto' || perfil.tipo === 'adolescente') && (
+            <IconButton
               to="/videojuegos/crear"
-              state={{ profile: perfil }} // Asegúrate de pasar el perfil aquí
-              className="mr-4 text-blue-300"
+              state={{ profile: perfil }}
+              icon={PlusCircle}
+              label="Crear Videojuego"
+            />
+          )}
+
+          {!isCatalogoPage && !isPerfilesPage && !isLoginPage && !isRegisterPage && (
+            <IconButton
+              to={`/catalogo/${perfil?._id}`}
+              state={{ profile: perfil }}
+              icon={Gamepad2}
+              label="Catálogo"
+            />
+          )}
+
+          {!isPerfilesPage && !isLoginPage && !isRegisterPage && (
+            <IconButton
+              to="/perfiles"
+              icon={UserRound}
+              label="Perfiles"
+            />
+          )}
+
+          {isCatalogoPage && (
+            <button
+              onClick={() => setShowFavoritesModal(true)}
+              className="inline-flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-xl shadow-md hover:bg-blue-800 transition-all duration-300"
             >
-              Crear Videojuego
-            </Link>
-            
-          </>
-        )}
-        <Link to="/favoritos" className="text-blue-300">Favoritos</Link>
-      </nav>
-    </header>
+              <Heart size={18} />
+              <span>Favoritos</span>
+            </button>
+          )}
+
+          {/* Cerrar sesión */}
+          {!isLoginPage && !isRegisterPage && (
+            <button
+              onClick={handleLogout}
+              className="inline-flex items-center gap-2 bg-red-600 text-white px-4 py-2 rounded-xl shadow-md hover:bg-red-700 transition-all duration-300"
+            >
+              <LogOut size={18} />
+              <span>Cerrar Sesión</span>
+            </button>
+          )}
+        </nav>
+      </div>
+
+      {showFavoritesModal && (
+        <FavoritesModal perfil={perfil} onClose={() => setShowFavoritesModal(false)} />
+      )}
+    </motion.header>
   );
 };
 

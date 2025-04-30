@@ -12,59 +12,62 @@ import {VideojuegoProvider} from '../context/VideojuegoContext';
 import Header from '../components/Header';
 
 
+import { FavoritesProvider } from '../context/FavoritesContext';
+
+
 const AppRouter = () => {
     return (
         <Router>
             <AuthProvider>
                 <VideojuegoProvider>
-                    <Header />
+                    <FavoritesProvider>
+                        <Header />
 
-                    <Routes>
-                        <Route path="/login" element={<Login />} />
-                        <Route path="/register" element={<Register />} />
+                        <Routes>
+                            <Route path="/login" element={<Login />} />
+                            <Route path="/register" element={<Register />} />
 
-                        <Route
-                            path="/perfiles"
-                            element={
-                            <ProtectedRoute>
-                                <ProfilesPage />
-                            </ProtectedRoute>
-                            }
-                        />
-
-                        <Route
-                            path="/catalogo/:perfilId"
-                            element={
-                            <ProtectedRoute>
-                                <CatalogoPage  />
-                            </ProtectedRoute>
-                            }
-                        />
-
-
-                        <Route
-                            path="/videojuegos/crear"
-                            element={
+                            <Route
+                                path="/perfiles"
+                                element={
                                 <ProtectedRoute>
-                                    <VideojuegoForm />
+                                    <ProfilesPage />
                                 </ProtectedRoute>
-                            }
-                        />
-                        <Route
-                            path="/videojuegos/editar/:id"
-                            element={
+                                }
+                            />
+
+                            <Route
+                                path="/catalogo/:perfilId"
+                                element={
                                 <ProtectedRoute>
-                                    <VideojuegoForm />
+                                    <CatalogoPage  />
                                 </ProtectedRoute>
-                            }
-                        />
-                        
+                                }
+                            />
 
-                    </Routes>
 
+                            <Route
+                                path="/videojuegos/crear"
+                                element={
+                                    <ProtectedRoute>
+                                        <VideojuegoForm />
+                                    </ProtectedRoute>
+                                }
+                            />
+                            <Route
+                                path="/videojuegos/editar/:id"
+                                element={
+                                    <ProtectedRoute>
+                                        <VideojuegoForm />
+                                    </ProtectedRoute>
+                                }
+                            />
+                            
+
+                        </Routes>
+
+                    </FavoritesProvider> 
                 </VideojuegoProvider>
-
-                
             </AuthProvider>
         </Router>
     );

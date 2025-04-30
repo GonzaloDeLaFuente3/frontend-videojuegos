@@ -2,9 +2,12 @@ import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useAuth } from '../context/AuthContext';
 import {toast} from 'react-toastify';
+import { useNavigate } from 'react-router-dom'; // Importa el hook useNavigate para redirigir al usuario después de iniciar sesión
 
 
 const Login = () => {
+
+    const navigate = useNavigate(); // Inicializa el hook useNavigate para redirigir al usuario
 
     const { register, handleSubmit, formState: { errors } } = useForm(); //  Capturamos errores
     const { login } = useAuth();//  Obtenemos la función de inicio de sesión del contexto de autenticación
@@ -63,6 +66,14 @@ const Login = () => {
             <button type="submit" className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 rounded">
                 Ingresar
             </button>
+
+            <button
+            onClick={() => navigate(`/register`)}
+            className="w-full bg-gray-600 hover:bg-green-700 text-white font-semibold py-2 rounded"
+            >
+                Registrar nuevo usuario
+            </button>
+
         </form>
     );
 };

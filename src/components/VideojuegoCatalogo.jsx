@@ -2,16 +2,19 @@ import React, { useEffect, useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useVideojuego } from '../context/VideojuegoContext';
 import { Link, useNavigate } from 'react-router-dom';
-import { Gamepad2, Pencil, Trash2 } from 'lucide-react';
+import { Gamepad2, Pencil, Trash2, Heart } from 'lucide-react';
 import api from '../services/api';
 import Swal from 'sweetalert2';
 import { toast } from 'react-toastify';
+import { useFavorites } from '../context/FavoritesContext'; // Importa el contexto de favoritos
 
 const VideojuegoCatalogo = ({ perfil }) => {
     const { token } = useAuth(); // Obtiene el token del contexto de autenticación
-    const { eliminarVideojuego } = useVideojuego();// Obtiene la función para eliminar videojuegos del contexto
+    const {  eliminarVideojuego } = useVideojuego();// Obtiene la función para eliminar videojuegos del contexto
     const [localVideojuegos, setLocalVideojuegos] = useState([]); // Estado local para almacenar los videojuegos
     const navigate = useNavigate();
+
+    const { addToFavorites } = useFavorites();
 
     useEffect(() => {
         const fetchVideojuegos = async () => {// Función para obtener los videojuegos
@@ -58,6 +61,12 @@ const VideojuegoCatalogo = ({ perfil }) => {
         }
     };
 
+    const handleAddToFavorites = (videojuego) => {
+        addToFavorites(perfil._id, videojuego);
+    };
+    
+    // const favorites = getFavorites(perfil._id);
+
     return (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {localVideojuegos.map((videojuego) => (// Mapea los videojuegos
@@ -103,6 +112,14 @@ const VideojuegoCatalogo = ({ perfil }) => {
                                 </button>
                             </div>
                         )}
+
+                        <button
+                        onClick={() => handleAddToFavorites(videojuego)}
+                        className="text-red-500 mt-2 flex items-center hover:cursor-pointer hover:text-red-800"
+                        >
+                            <Heart className="mr-1" size={20} /> Agregar a Favoritos
+                        </button>
+
                     </div>
                 </div>
             ))}
@@ -111,3 +128,4 @@ const VideojuegoCatalogo = ({ perfil }) => {
 };
 
 export default VideojuegoCatalogo;
+
