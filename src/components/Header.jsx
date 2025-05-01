@@ -13,6 +13,7 @@ import {
 import logo from "../assets/logo.png";
 import FavoritesModal from './FavoritesModal';
 import { useAuth } from '../context/AuthContext';
+import { useFavorites } from '../context/FavoritesContext'; // Importa el contexto de favoritos
 
 const Header = () => {
   const location = useLocation();
@@ -21,6 +22,11 @@ const Header = () => {
   const [showFavoritesModal, setShowFavoritesModal] = useState(false);
   const controls = useAnimation();
   const navigate = useNavigate();
+  const { getFavorites } = useFavorites(); // Obtenemos la función para obtener favoritos
+
+   // Obtenemos los favoritos del perfil actual
+  const favorites = perfil ? getFavorites(perfil._id) : [];
+  const favoritesCount = favorites.length;
 
   const isCatalogoPage = location.pathname.startsWith('/catalogo/');
   const isPerfilesPage = location.pathname === '/perfiles';
@@ -100,13 +106,26 @@ const Header = () => {
             />
           )}
 
+          {/* // Botón de favoritos */}
+
           {isCatalogoPage && (
             <button
               onClick={() => setShowFavoritesModal(true)}
-              className="inline-flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-xl shadow-md hover:bg-blue-800 transition-all duration-300"
+              className="inline-flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-xl shadow-md hover:bg-blue-800 transition-all duration-300 relative"
             >
               <Heart size={18} />
               <span>Favoritos</span>
+              {/* Contador de favoritos */}
+              {favoritesCount > 0 && (
+                <motion.span
+                key={favoritesCount}
+                initial={{ scale: 1.5 }}
+                animate={{ scale: 1 }}
+                className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center"
+                >
+                  {favoritesCount}
+                </motion.span>
+              )}
             </button>
           )}
 
@@ -123,6 +142,7 @@ const Header = () => {
         </nav>
       </div>
 
+      {/* Modal de favoritos */}
       {showFavoritesModal && (
         <FavoritesModal perfil={perfil} onClose={() => setShowFavoritesModal(false)} />
       )}

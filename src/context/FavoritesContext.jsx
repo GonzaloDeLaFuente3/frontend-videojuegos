@@ -30,7 +30,9 @@ export const FavoritesProvider = ({ children }) => {
         ...prevFavorites,
         [perfilId]: [...(prevFavorites[perfilId] || []), videojuego],
       }));
-      toast.success('Videojuego agregado a favoritos');
+      toast.success('Videojuego agregado a favoritos', {
+        position: 'top-center'
+      });
     }
   };
 
