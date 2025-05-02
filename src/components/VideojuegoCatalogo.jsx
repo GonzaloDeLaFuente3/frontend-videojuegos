@@ -1,14 +1,17 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-unused-vars */
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useVideojuego } from '../context/VideojuegoContext';
 import { Link, useNavigate } from 'react-router-dom';
 import { Gamepad2, Pencil, Trash2, Heart } from 'lucide-react';
 import Swal from 'sweetalert2';
 import { toast } from 'react-toastify';
 import { useFavorites } from '../context/FavoritesContext';
+import { ThemeContext } from '../context/ThemeContext';
 
 const VideojuegoCatalogo = ({ perfil }) => {
+  const { isDarkMode } = useContext(ThemeContext); // Obtenemos el estado del tema oscuro
+
   const { videojuegos, paginaActual, totalPaginas, aplicarFiltros, cambiarPagina, eliminarVideojuego } = useVideojuego();
   // console.log('totalPaginas', totalPaginas);
   const [filtrosLocales, setFiltrosLocales] = useState({
@@ -87,7 +90,7 @@ const VideojuegoCatalogo = ({ perfil }) => {
   return (
     <div>
       {/* //Manejar los filtros de búsqueda */}
-      <div className="bg-gray-800 p-4 rounded-lg shadow-md mb-6">
+      <div className={` p-4 rounded-lg shadow-md mb-6 ${isDarkMode ? 'bg-gray-800 text-white' : 'bg-blue-400 text-black'}`}>
         <div className="flex flex-wrap items-center gap-4 justify-between">
           <div className="flex flex-wrap gap-3">
             {/* //genero */}
@@ -97,7 +100,9 @@ const VideojuegoCatalogo = ({ perfil }) => {
               placeholder="Género"
               value={filtrosLocales.genero}
               onChange={handleFiltroChange}
-              className="bg-gray-700 text-white px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className={`  px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                isDarkMode ? 'bg-gray-700 text-white' : 'bg-blue-100 text-black'
+              }`} 
             />
             {/* //plataforma */}
             <input
@@ -106,7 +111,9 @@ const VideojuegoCatalogo = ({ perfil }) => {
               placeholder="Plataforma"
               value={filtrosLocales.plataforma}
               onChange={handleFiltroChange}
-              className="bg-gray-700 text-white px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className={`  px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                isDarkMode ? 'bg-gray-700 text-white' : 'bg-blue-100 text-black'
+              }`} 
             />
             {/* //edad minima */}
             <input
@@ -115,7 +122,9 @@ const VideojuegoCatalogo = ({ perfil }) => {
               placeholder="Edad mínima"
               value={filtrosLocales.edadMinima}
               onChange={handleFiltroChange}
-              className="bg-gray-700 text-white px-4 py-2 rounded-md w-36 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className={`  px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                isDarkMode ? 'bg-gray-700 text-white' : 'bg-blue-100 text-black'
+              }`} 
             />
           </div>
 
@@ -143,7 +152,9 @@ const VideojuegoCatalogo = ({ perfil }) => {
         {videojuegos.map((videojuego) => (// Mapeo de la lista de videojuegos
           <div
             key={videojuego._id}
-            className="bg-white rounded-2xl shadow-md hover:shadow-xl overflow-hidden transform hover:scale-105 transition duration-300 relative"
+            className={`rounded-2xl shadow-md hover:shadow-xl overflow-hidden transform hover:scale-105 transition duration-300 relative ${
+              isDarkMode ? 'bg-gray-800 text-white' : 'bg-blue-50 text-black'
+            }`}
           >
             {/* // Imagen del videojuego */}
             <img
@@ -159,8 +170,8 @@ const VideojuegoCatalogo = ({ perfil }) => {
                 <Gamepad2 className="text-blue-500" size={24} />
               </div>
 
-              <p className="text-sm text-gray-600 mt-1">Género: {videojuego.genero.join(', ')}</p>
-              <p className="text-sm text-gray-600">Plataforma: {videojuego.plataforma.join(', ')}</p>
+              <p className= {`text-sm  mt-1 ${isDarkMode ? 'text-gray-300':'text-gray-600'}`}>Género: {videojuego.genero.join(', ')}</p>
+              <p className={`text-sm  mt-1 ${isDarkMode ? 'text-gray-300':'text-gray-600'}`}>Plataforma: {videojuego.plataforma.join(', ')}</p>
 
               <div className="mt-2">
                 <span className="inline-block bg-blue-100 text-blue-600 text-xs px-2 py-1 rounded-full">
@@ -216,7 +227,7 @@ const VideojuegoCatalogo = ({ perfil }) => {
           Anterior
         </button>
         {/* // Información de la paginación */}
-        <span className="text-gray-500">
+        <span className= {` ${isDarkMode ? 'text-gray-100' : 'text-gray-500'}`}>
           Página <span className="font-bold">{paginaActual}</span> de{' '}
           <span className="font-bold">{!isNaN(totalPaginas) ? totalPaginas : '1'}</span>
         </span>

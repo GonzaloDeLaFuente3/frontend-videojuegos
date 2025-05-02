@@ -2,8 +2,11 @@
 import React from 'react';
 import { Gamepad2, X, Trash2 } from 'lucide-react';
 import { useFavorites } from '../context/FavoritesContext';
+import { useContext } from 'react';
+import { ThemeContext } from '../context/ThemeContext'; // Importa el contexto de tema
 
 const FavoritesModal = ({ perfil, onClose }) => {
+    const { isDarkMode } = useContext(ThemeContext); // Obtenemos el estado del tema oscuro
     const { getFavorites, removeFromFavorites } = useFavorites();//  Obtenemos las funciones del contexto de favoritos
     const favorites = getFavorites(perfil?._id); //  Obtenemos los videojuegos favoritos del perfil actual
 
@@ -13,7 +16,7 @@ const FavoritesModal = ({ perfil, onClose }) => {
 
     return (
         <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm flex items-center justify-center z-50">
-            <div className="bg-white rounded-2xl shadow-2xl w-full max-w-xl mx-4 p-6 relative animate-fade-in">
+            <div className={` rounded-2xl shadow-2xl w-full max-w-xl mx-4 p-6 relative animate-fade-in ${isDarkMode ? 'bg-gray-800 ' : 'bg-white '}`}>
                 {/* Cierre */}
                 <button
                 onClick={onClose}
@@ -31,13 +34,13 @@ const FavoritesModal = ({ perfil, onClose }) => {
                 ) : (
                 <div className="max-h-[60vh] overflow-y-auto space-y-4 pr-2">
                     {favorites.map((videojuego) => (
-                        <div key={videojuego._id} className="bg-gray-50 border rounded-lg p-4 shadow-sm hover:shadow-md transition">
+                        <div key={videojuego._id} className={`  rounded-lg p-4 shadow-sm hover:shadow-md transition ${isDarkMode ? 'bg-gray-700 text-white' : 'bg-blue-50 text-gray-600'}`}>
                             <div className="flex items-center justify-between mb-1">
-                                <h3 className="text-lg font-semibold text-gray-800">{videojuego.titulo}</h3>
+                                <h3 className="text-lg font-semibold ">{videojuego.titulo}</h3>
                                 <Gamepad2 className="text-blue-500" size={22} />
                             </div>
-                            <p className="text-sm text-gray-600"><strong>Género:</strong> {videojuego.genero.join(', ')}</p>
-                            <p className="text-sm text-gray-600"><strong>Plataforma:</strong> {videojuego.plataforma.join(', ')}</p>
+                            <p className="text-sm "><strong>Género:</strong> {videojuego.genero.join(', ')}</p>
+                            <p className="text-sm "><strong>Plataforma:</strong> {videojuego.plataforma.join(', ')}</p>
                             <button
                             onClick={() => handleRemove(videojuego._id)}
                             className="text-sm text-red-500 hover:text-red-800 mt-2 font-medium flex items-center gap-1 hover:cursor-pointer"

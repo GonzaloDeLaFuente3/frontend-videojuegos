@@ -1,11 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Plus, X } from 'lucide-react'; // Plus para agregar, X para cerrar
 import VideojuegoCatalogo from './VideojuegoCatalogo';
 import AddProfileForm from './AddProfileForm';
-import { toast } from 'react-toastify'; // Importa toast para mostrar mensajes de éxito
+import { toast } from 'react-toastify';
+import { ThemeContext } from '../context/ThemeContext';  // Importa toast para mostrar mensajes de éxito
 
 const ProfileSelection = ({ profiles }) => {
+    const { isDarkMode } = useContext(ThemeContext); // Obtenemos el estado del tema oscuro
+
     const [selectedProfile, setSelectedProfile] = useState(null);// Estado para el perfil seleccionado
     const [showAddFormModal, setShowAddFormModal] = useState(false);// Estado para mostrar el modal de agregar perfil
 
@@ -28,7 +31,7 @@ const ProfileSelection = ({ profiles }) => {
     };
 
     return (
-        <div className="flex flex-col items-center">
+        <div className={`flex flex-col items-center ${isDarkMode ? 'bg-gray-900 text-white' : 'bg-white text-black'} p-4 rounded-2xl shadow-lg`}>
             <h1 className="text-3xl font-bold mb-8 text-center">¿Quién está jugando?</h1>
 
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
@@ -37,7 +40,7 @@ const ProfileSelection = ({ profiles }) => {
                 <div
                     key={profile._id}
                     onClick={() => handleProfileSelect(profile)}// Selecciona el perfil
-                    className="group bg-white p-6 rounded-2xl shadow-md hover:shadow-xl cursor-pointer flex flex-col items-center transition-transform transform hover:scale-105"
+                    className={`group  p-6 rounded-2xl shadow-md hover:shadow-xl cursor-pointer flex flex-col items-center transition-transform transform hover:scale-105 ${isDarkMode ? 'bg-gray-800 text-white' : 'bg-blue-50 text-black'}`}
                 >
                     {profile.avatar ? (
                         <img
@@ -58,7 +61,7 @@ const ProfileSelection = ({ profiles }) => {
                 {/* Tarjeta Agregar Perfil */}
                 <div
                 onClick={handleAddProfileClick}
-                className="group bg-gray-100 p-6 rounded-2xl shadow-md hover:shadow-xl cursor-pointer flex flex-col items-center justify-center transition-transform transform hover:scale-105"
+                className={`group  p-6 rounded-2xl shadow-md hover:shadow-xl cursor-pointer flex flex-col items-center justify-center transition-transform transform hover:scale-105 ${isDarkMode ? 'bg-gray-600 text-white' : 'bg-gray-400 text-black'}`}
                 >
 
                     <div className="w-24 h-24 rounded-full bg-blue-500 text-white flex items-center justify-center mb-4">

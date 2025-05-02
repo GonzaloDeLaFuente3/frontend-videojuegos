@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 // src/components/Header.jsx
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useLocation, Link, useNavigate } from 'react-router-dom';
 import { motion, useAnimation } from 'framer-motion';
 import {
@@ -8,12 +8,15 @@ import {
   Gamepad2,
   UserRound,
   Heart,
-  LogOut
+  LogOut,
+  Moon,
+  Sun,
 } from 'lucide-react';
 import logo from "../assets/logo.png";
 import FavoritesModal from './FavoritesModal';
 import { useAuth } from '../context/AuthContext';
 import { useFavorites } from '../context/FavoritesContext'; // Importa el contexto de favoritos
+import { ThemeContext } from '../context/ThemeContext'; // Importa el contexto de tema
 
 const Header = () => {
   const location = useLocation();
@@ -23,6 +26,7 @@ const Header = () => {
   const controls = useAnimation();
   const navigate = useNavigate();
   const { getFavorites } = useFavorites(); // Obtenemos la función para obtener favoritos
+  const { isDarkMode, toggleTheme } = useContext(ThemeContext); // Obtenemos el estado del tema y la función para alternar
 
    // Obtenemos los favoritos del perfil actual
   const favorites = perfil ? getFavorites(perfil._id) : [];
@@ -64,15 +68,17 @@ const Header = () => {
       initial={{ y: -80, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.5, ease: 'easeOut' }}
-      className="bg-gray-900 text-white px-6 py-4 shadow-md sticky top-0 z-50"
+      className={` px-6 py-4 shadow-md sticky top-0 z-50 ${
+        isDarkMode ? 'bg-gray-900 text-white' : 'bg-blue-500 text-gray-900'
+      }`}
     >
       <div className="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
         {/* Logo y título */}
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3 ">
           <motion.img
             src={logo}
             alt="Logo"
-            className="w-10 h-10"
+            className="w-10 h-10 rounded-full "
             animate={controls}
           />
           <h1 className="text-2xl font-bold tracking-tight text-white">NodoGames</h1>
@@ -129,11 +135,25 @@ const Header = () => {
             </button>
           )}
 
+          {/* Botón de tema oscuro/claro */}
+          <motion.button
+            onClick={toggleTheme}// Cambia el tema al hacer clic
+            className={`p-2 rounded-full hover:cursor-pointer ${
+              isDarkMode ? 'bg-gray-700 text-yellow-300' : 'bg-gray-700 text-white'
+            }`}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            aria-label={isDarkMode ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'}
+          >
+            {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
+          </motion.button>
+
+
           {/* Cerrar sesión */}
           {!isLoginPage && !isRegisterPage && (
             <button
               onClick={handleLogout}
-              className="inline-flex items-center gap-2 bg-red-600 text-white px-4 py-2 rounded-xl shadow-md hover:bg-red-700 transition-all duration-300"
+              className="hover:cursor-pointer inline-flex items-center gap-2 bg-red-600 text-white px-4 py-2 rounded-xl shadow-md hover:bg-red-700 transition-all duration-300"
             >
               <LogOut size={18} />
               <span>Cerrar Sesión</span>

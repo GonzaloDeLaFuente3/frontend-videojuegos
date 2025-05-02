@@ -1,11 +1,13 @@
 // src/components/VideojuegoForm.jsx
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { useForm } from 'react-hook-form';
 import { useVideojuego } from '../context/VideojuegoContext';
 import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import Swal from 'sweetalert2';
+import { ThemeContext } from '../context/ThemeContext'; // Importa el contexto de tema
 
 const VideojuegoForm = () => {
+  const { isDarkMode } = useContext(ThemeContext); // Obtenemos el estado del tema oscuro
   const { register, handleSubmit, setValue, formState: { errors, isSubmitting } } = useForm();// para manejar el formulario, validaciones y errores
   const { crearVideojuego, actualizarVideojuego, videojuegos } = useVideojuego();// para acceder a las funciones de crear y actualizar videojuegos
   const navigate = useNavigate();
@@ -60,7 +62,7 @@ const VideojuegoForm = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="max-w-2xl mx-auto bg-white p-6 rounded-2xl shadow-lg mt-6">
+    <form onSubmit={handleSubmit(onSubmit)} className={`max-w-2xl mx-auto  p-6 rounded-2xl shadow-lg mt-6 ${isDarkMode ? 'text-white' : 'text-black'} ${isDarkMode ? 'bg-gray-800 text-white' : 'bg-white text-gray-700'}`}>
       <h2 className="text-2xl font-bold mb-6 text-center text-blue-600">{isEditing ? 'Editar' : 'Crear'} Videojuego</h2>
 
 
@@ -75,7 +77,7 @@ const VideojuegoForm = () => {
       ].map(({ name, label, type, required = true }) => (
         // cada campo del formulario es un objeto con nombre, etiqueta, tipo y si es requerido o no
         <div key={name} className="mb-5">
-          <label htmlFor={name} className="block text-sm font-medium text-gray-700 mb-1">{label}</label>
+          <label htmlFor={name} className="block text-sm font-medium  mb-1">{label}</label>
           <input
             id={name}
             type={type}
