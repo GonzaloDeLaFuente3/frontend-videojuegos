@@ -33,21 +33,38 @@ const FavoritesModal = ({ perfil, onClose }) => {
                     <p className="text-center text-gray-500">No hay videojuegos en favoritos.</p>
                 ) : (
                 <div className="max-h-[60vh] overflow-y-auto space-y-4 pr-2">
-                    {favorites.map((videojuego) => (
-                        <div key={videojuego._id} className={`  rounded-lg p-4 shadow-sm hover:shadow-md transition ${isDarkMode ? 'bg-gray-700 text-white' : 'bg-blue-50 text-gray-600'}`}>
-                            <div className="flex items-center justify-between mb-1">
-                                <h3 className="text-lg font-semibold ">{videojuego.titulo}</h3>
-                                <Gamepad2 className="text-blue-500" size={22} />
+                    {favorites.map((videojuego) => ( 
+                        <div
+                            key={videojuego._id}
+                            className={`flex items-start gap-4 rounded-lg p-4 shadow-sm hover:shadow-md transition ${
+                            isDarkMode ? 'bg-gray-700 text-white' : 'bg-blue-50 text-gray-600'
+                            }`}
+                        >
+                            {/* Imagen del videojuego */}
+                            <img
+                            src={videojuego.imgUrl}
+                            alt={videojuego.titulo}
+                            className="w-24 h-24 object-cover rounded-lg flex-shrink-0"
+                            onError={(e) => {
+                                e.target.src = 'https://via.placeholder.com/96';
+                            }}
+                            />
+
+                            {/* Detalles del videojuego */}
+                            <div className="flex-1">
+                                <div className="flex items-center justify-between mb-1">
+                                    <h3 className="text-lg font-semibold">{videojuego.titulo}</h3>
+                                    <Gamepad2 className="text-blue-500" size={22} />
+                                </div>
+                                <p className="text-sm"><strong>Género:</strong> {videojuego.genero.join(', ')}</p>
+                                <p className="text-sm"><strong>Plataforma:</strong> {videojuego.plataforma.join(', ')}</p>
+                                <button
+                                    onClick={() => handleRemove(videojuego._id)}
+                                    className="text-sm text-red-500 hover:text-red-800 mt-2 font-medium flex items-center gap-1 hover:cursor-pointer"
+                                >
+                                    <Trash2 size={16} /> Quitar de Favoritos
+                                </button>
                             </div>
-                            <p className="text-sm "><strong>Género:</strong> {videojuego.genero.join(', ')}</p>
-                            <p className="text-sm "><strong>Plataforma:</strong> {videojuego.plataforma.join(', ')}</p>
-                            <button
-                            onClick={() => handleRemove(videojuego._id)}
-                            className="text-sm text-red-500 hover:text-red-800 mt-2 font-medium flex items-center gap-1 hover:cursor-pointer"
-                            >
-                                <Trash2 size={16} /> Quitar de Favoritos
-                                
-                            </button>
                         </div>
                     ))}
                 </div>

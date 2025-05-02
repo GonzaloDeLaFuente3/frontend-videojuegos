@@ -1,4 +1,4 @@
-// eslint-disable-next-line react-refresh/only-export-components
+/* eslint-disable react-refresh/only-export-components */
 import { createContext, useState, useEffect } from "react";
 
 //creo el contexto 
