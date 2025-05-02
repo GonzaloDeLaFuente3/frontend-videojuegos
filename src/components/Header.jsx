@@ -11,12 +11,15 @@ import {
   LogOut,
   Moon,
   Sun,
+  Star,
 } from 'lucide-react';
 import logo from "../assets/logo.png";
 import FavoritesModal from './FavoritesModal';
 import { useAuth } from '../context/AuthContext';
 import { useFavorites } from '../context/FavoritesContext'; // Importa el contexto de favoritos
 import { ThemeContext } from '../context/ThemeContext'; // Importa el contexto de tema
+import PopularGamesModal from './PopularGamesModal'; // Importa el modal de juegos populares 
+import api from '../services/api.mjs'; // Importa la instancia configurada de Axios
 
 const Header = () => {
   const location = useLocation();
@@ -36,6 +39,10 @@ const Header = () => {
   const isPerfilesPage = location.pathname === '/perfiles';
   const isLoginPage = location.pathname === '/login';
   const isRegisterPage = location.pathname === '/register';
+
+  const [showPopularGamesModal, setShowPopularGamesModal] = useState(false);
+  const [popularGames, setPopularGames] = useState([]);
+  const [isLoadingGames, setIsLoadingGames] = useState(false);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -63,6 +70,24 @@ const Header = () => {
     logout();  // Limpia sesión y redirige automáticamente
   };
 
+  const fetchPopularGames = async () => {
+    setIsLoadingGames(true);
+    try {
+      const response = await api.get('/juegos/populares');
+      setPopularGames(response.data);
+    } catch (error) {
+      console.error('Error fetching popular games:', error);
+      // Puedes agregar un toast de error aquí si lo deseas
+    } finally {
+      setIsLoadingGames(false);
+    }
+  };
+
+  const handlePopularGamesClick = () => {
+    setShowPopularGamesModal(true);
+    fetchPopularGames();
+  };
+
   return (
     <motion.header
       initial={{ y: -80, opacity: 0 }}
@@ -86,6 +111,19 @@ const Header = () => {
 
         {/* Navegación */}
         <nav className="flex flex-wrap gap-3 items-center justify-center">
+          {/* Botón de Juegos Populares */}
+          <motion.button
+            onClick={handlePopularGamesClick}
+            className={`inline-flex items-center gap-2 hover:cursor-pointer ${
+              isDarkMode ? 'bg-purple-700 hover:bg-purple-800' : 'bg-purple-600 hover:bg-purple-700'
+            } text-white px-4 py-2 rounded-xl shadow-md transition-all duration-300`}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            <Star size={18} />
+            <span>Juegos Populares</span>
+          </motion.button>
+
           {perfil && (perfil.tipo === 'adulto' || perfil.tipo === 'adolescente') && (
             <IconButton
               to="/videojuegos/crear"
@@ -165,6 +203,16 @@ const Header = () => {
       {/* Modal de favoritos */}
       {showFavoritesModal && (
         <FavoritesModal perfil={perfil} onClose={() => setShowFavoritesModal(false)} />
+      )}
+
+      {/* Modal de Juegos Populares */}
+      {showPopularGamesModal && (
+        <PopularGamesModal 
+          games={popularGames} 
+          loading={isLoadingGames}
+          onClose={() => setShowPopularGamesModal(false)}
+          isDarkMode={isDarkMode}
+        />
       )}
     </motion.header>
   );
