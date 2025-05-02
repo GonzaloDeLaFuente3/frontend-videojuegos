@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState, useContext } from 'react';
 import { useAuth } from '../context/AuthContext';
 import ProfileSelection from '../components/ProfileSelection';
@@ -13,27 +14,27 @@ const ProfilesPage = () => {
     const { token } = useAuth();
     const [profiles, setProfiles] = useState([]);
 
-    useEffect(() => {
-        const fetchProfiles = async () => {
+    const fetchProfiles = async () => {
         try {
             const response = await api.get('/perfiles', {
-            headers: {
-                'Authorization': `Bearer ${token}`,
-            },
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
             });
             setProfiles(response.data);
         } catch (error) {
-            console.error('Error fetching profiles:', error);
+            console.error('Error al obtener perfiles:', error);
         }
-        };
-
+    };
+    
+    useEffect(() => {
         fetchProfiles();
-    }, [token]);
+    }, []);
 
     return (
         <div className={`min-h-screen bg-gray-100 p-4 ${isDarkMode ? 'bg-gray-700 text-white' : 'bg-white text-black'} flex flex-col items-center justify-center`}>
             <h1 className="text-2xl font-bold mb-4 text-center">Por Favor Seleccione un Perfil</h1>
-            <ProfileSelection profiles={profiles} />
+            <ProfileSelection profiles={profiles} refreshProfiles={fetchProfiles}  />
             {/* <AddProfileForm /> */}
         </div>
     );
