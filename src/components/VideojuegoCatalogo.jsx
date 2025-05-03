@@ -12,8 +12,7 @@ import { ThemeContext } from '../context/ThemeContext';
 const VideojuegoCatalogo = ({ perfil }) => {
   const { isDarkMode } = useContext(ThemeContext); // Obtenemos el estado del tema oscuro
 
-  const { videojuegos, paginaActual, totalPaginas, aplicarFiltros, cambiarPagina, eliminarVideojuego } = useVideojuego();
-  // console.log('totalPaginas', totalPaginas);
+  const { videojuegos, paginaActual, totalPaginas, aplicarFiltros, cambiarPagina, eliminarVideojuego } = useVideojuego();// Obtiene los videojuegos y funciones del contexto de videojuegos
   const [filtrosLocales, setFiltrosLocales] = useState({
     genero: '',
     plataforma: '',   
@@ -71,21 +70,18 @@ const VideojuegoCatalogo = ({ perfil }) => {
         toast.success('Videojuego eliminado exitosamente');
         navigate(`/catalogo/${perfil._id}`, { state: { profile: perfil } });// Redirige al catálogo después de eliminar
       } catch (error) {
-        // console.error('Error al eliminar:', error);
         toast.error('Error al eliminar el videojuego');
       }
     }
   };
 
-  const handleAddToFavorites = (videojuego) => {
+  const handleAddToFavorites = (videojuego) => {// Manejo de agregar a favoritos
     addToFavorites(perfil._id, videojuego);
   };
 
   if (!videojuegos) {// Verifica si la lista de videojuegos está vacía o no se ha cargado
     return <div>Cargando...</div>; // Manejo de estado de carga
   }
-
-
 
   return (
     <div>
@@ -147,7 +143,6 @@ const VideojuegoCatalogo = ({ perfil }) => {
         </div>
       </div>
 
-
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
         {videojuegos.map((videojuego) => (// Mapeo de la lista de videojuegos
           <div
@@ -182,8 +177,8 @@ const VideojuegoCatalogo = ({ perfil }) => {
               {(perfil.tipo === 'adulto' || perfil.tipo === 'adolescente') && (
                 <div className="mt-4 flex justify-end space-x-2">
                   <Link
-                    to={`/videojuegos/editar/${videojuego._id}`}
-                    state={{ profile: perfil }}
+                    to={`/videojuegos/editar/${videojuego._id}`}// Enlace para editar el videojuego
+                    state={{ profile: perfil }}// Estado del perfil
                     className="bg-yellow-400 hover:bg-yellow-500 text-white px-3 py-1 rounded-md flex items-center gap-1 text-sm shadow"
                   >
                     <Pencil size={16} />
@@ -211,13 +206,12 @@ const VideojuegoCatalogo = ({ perfil }) => {
         ))}
       </div>
 
-
       {/* // Paginación */}
       <div className="flex justify-center items-center space-x-4 mt-6">
         {/* // boton de anterior */}
         <button
-          onClick={() => cambiarPagina(paginaActual - 1)}
-          disabled={paginaActual === 1}
+          onClick={() => cambiarPagina(paginaActual - 1)}// Cambia a la página anterior
+          disabled={paginaActual === 1}// Deshabilita el botón si está en la primera página
           className={`px-4 py-2 rounded-md text-white transition-colors ${
             paginaActual === 1
               ? 'bg-gray-500 cursor-not-allowed'
@@ -235,7 +229,7 @@ const VideojuegoCatalogo = ({ perfil }) => {
         {/* // boton de siguiente */}
         <button
           onClick={() => cambiarPagina(paginaActual + 1)}
-          disabled={paginaActual === totalPaginas}
+          disabled={paginaActual === totalPaginas}// Deshabilita el botón si está en la última página
           className={`px-4 py-2 rounded-md text-white transition-colors ${
             paginaActual === totalPaginas
               ? 'bg-gray-500 cursor-not-allowed'
@@ -245,8 +239,6 @@ const VideojuegoCatalogo = ({ perfil }) => {
           Siguiente
         </button>
       </div>
-
-
     </div>
   );
 };

@@ -1,18 +1,8 @@
 /* eslint-disable no-unused-vars */
-// src/components/Header.jsx
 import React, { useState, useEffect, useContext } from 'react';
 import { useLocation, Link, useNavigate } from 'react-router-dom';
 import { motion, useAnimation } from 'framer-motion';
-import {
-  PlusCircle,
-  Gamepad2,
-  UserRound,
-  Heart,
-  LogOut,
-  Moon,
-  Sun,
-  Star,
-} from 'lucide-react';
+import { PlusCircle, Gamepad2,UserRound,Heart,LogOut,Moon,Sun,Star,} from 'lucide-react';
 import logo from "../assets/logo.png";
 import FavoritesModal from './FavoritesModal';
 import { useAuth } from '../context/AuthContext';
@@ -22,27 +12,27 @@ import PopularGamesModal from './PopularGamesModal'; // Importa el modal de jueg
 import api from '../services/api.mjs'; // Importa la instancia configurada de Axios
 
 const Header = () => {
-  const location = useLocation();
-  const { state } = location;
-  const perfil = state?.profile;
-  const [showFavoritesModal, setShowFavoritesModal] = useState(false);
-  const controls = useAnimation();
+  const location = useLocation();// Obtenemos la ubicación actual
+  const { state } = location;// Obtenemos el estado de la ubicación
+  const perfil = state?.profile;// Obtenemos el perfil del estado de la ubicación
+  const [showFavoritesModal, setShowFavoritesModal] = useState(false);// Estado para mostrar el modal de favoritos
+  const controls = useAnimation();// Animación para el logo
   const navigate = useNavigate();
   const { getFavorites } = useFavorites(); // Obtenemos la función para obtener favoritos
   const { isDarkMode, toggleTheme } = useContext(ThemeContext); // Obtenemos el estado del tema y la función para alternar
 
    // Obtenemos los favoritos del perfil actual
-  const favorites = perfil ? getFavorites(perfil._id) : [];
+  const favorites = perfil ? getFavorites(perfil._id) : [];// Si no hay perfil, no hay favoritos
   const favoritesCount = favorites.length;
 
-  const isCatalogoPage = location.pathname.startsWith('/catalogo/');
+  const isCatalogoPage = location.pathname.startsWith('/catalogo/');// Verifica si estamos en la página de catálogo
   const isPerfilesPage = location.pathname === '/perfiles';
   const isLoginPage = location.pathname === '/login';
   const isRegisterPage = location.pathname === '/register';
 
-  const [showPopularGamesModal, setShowPopularGamesModal] = useState(false);
-  const [popularGames, setPopularGames] = useState([]);
-  const [isLoadingGames, setIsLoadingGames] = useState(false);
+  const [showPopularGamesModal, setShowPopularGamesModal] = useState(false);// Estado para mostrar el modal de juegos populares
+  const [popularGames, setPopularGames] = useState([]);// Estado para almacenar los juegos populares
+  const [isLoadingGames, setIsLoadingGames] = useState(false);// Estado para manejar la carga de juegos populares
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -53,7 +43,7 @@ const Header = () => {
     return () => clearInterval(interval);
   }, [controls]);
 
-  const IconButton = ({ to, state, icon: Icon, label }) => (
+  const IconButton = ({ to, state, icon: Icon, label }) => (// Componente reutilizable para los botones de navegación
     <Link
       to={to}
       state={state}
@@ -76,15 +66,14 @@ const Header = () => {
       const response = await api.get('/juegos/populares');
       setPopularGames(response.data);
     } catch (error) {
-      console.error('Error fetching popular games:', error);
-      // Puedes agregar un toast de error aquí si lo deseas
+      console.error('Error fetching (obtener) popular games:', error);
     } finally {
       setIsLoadingGames(false);
     }
   };
 
-  const handlePopularGamesClick = () => {
-    setShowPopularGamesModal(true);
+  const handlePopularGamesClick = () => {// Maneja el clic en el botón de juegos populares
+    setShowPopularGamesModal(true);// Muestra el modal de juegos populares
     fetchPopularGames();
   };
 
@@ -111,6 +100,7 @@ const Header = () => {
 
         {/* Navegación */}
         <nav className="flex flex-wrap gap-3 items-center justify-center">
+
           {/* Botón de Juegos Populares */}
           <motion.button
             onClick={handlePopularGamesClick}
@@ -124,6 +114,7 @@ const Header = () => {
             <span>Juegos Populares</span>
           </motion.button>
 
+              {/* // Botón de crear videojuego */}
           {perfil && (perfil.tipo === 'adulto' || perfil.tipo === 'adolescente') && (
             <IconButton
               to="/videojuegos/crear"
@@ -133,6 +124,7 @@ const Header = () => {
             />
           )}
 
+          {/* Botón de catálogo */}
           {!isCatalogoPage && !isPerfilesPage && !isLoginPage && !isRegisterPage && (
             <IconButton
               to={`/catalogo/${perfil?._id}`}
@@ -142,6 +134,7 @@ const Header = () => {
             />
           )}
 
+          {/* Botón de perfiles */}
           {!isPerfilesPage && !isLoginPage && !isRegisterPage && (
             <IconButton
               to="/perfiles"
@@ -151,10 +144,9 @@ const Header = () => {
           )}
 
           {/* // Botón de favoritos */}
-
           {isCatalogoPage && (
             <button
-              onClick={() => setShowFavoritesModal(true)}
+              onClick={() => setShowFavoritesModal(true)}// Muestra el modal de favoritos al hacer clic
               className="inline-flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-xl shadow-md hover:bg-blue-800 transition-all duration-300 relative"
             >
               <Heart size={18} />
@@ -186,7 +178,6 @@ const Header = () => {
             {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
           </motion.button>
 
-
           {/* Cerrar sesión */}
           {!isLoginPage && !isRegisterPage && (
             <button
@@ -210,7 +201,7 @@ const Header = () => {
         <PopularGamesModal 
           games={popularGames} 
           loading={isLoadingGames}
-          onClose={() => setShowPopularGamesModal(false)}
+          onClose={() => setShowPopularGamesModal(false)}// Cierra el modal al hacer clic
           isDarkMode={isDarkMode}
         />
       )}

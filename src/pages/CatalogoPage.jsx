@@ -1,4 +1,3 @@
-// src/pages/CatalogoPage.jsx
 import React from 'react';
 import { useLocation } from 'react-router-dom';
 import VideojuegoCatalogo from '../components/VideojuegoCatalogo';
@@ -7,7 +6,6 @@ import { ThemeContext } from '../context/ThemeContext'; // Importa el contexto d
 
 const CatalogoPage = () => {
     const { isDarkMode } = useContext(ThemeContext); // Obtenemos el estado del tema oscuro
-
     const location = useLocation();// Obtiene la ubicación actual
     const { profile } = location.state || {};// Obtiene el perfil del estado de la ubicación
 

@@ -4,28 +4,25 @@ import { useAuth } from '../context/AuthContext';
 import { ThemeContext } from '../context/ThemeContext';
 import { useNavigate } from 'react-router-dom';
 
-
-
 const Register = () => {
     const navigate = useNavigate(); // Inicializa el hook useNavigate para redirigir al usuario
     const { isDarkMode } = useContext(ThemeContext); // Obtenemos el estado del tema oscuro
     
-    const { register, handleSubmit } = useForm();
+    const { register, handleSubmit } = useForm();// Manejo del formulario de registro
     const { register: registerUser } = useAuth();
     const [error, setError] = useState(null);
 
     const onSubmit = async (data) => {
         try {
-        await registerUser(data.nombre, data.email, data.password);
+            await registerUser(data.nombre, data.email, data.password);
         } catch (err) {
-        setError(err.message);
+            setError(err.message);
         }
     };
 
     return (
         <div> 
             <h1 className={`text-3xl font-bold text-center mt-10 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>Registrar Usuario</h1> 
-
             <form onSubmit={handleSubmit(onSubmit)} className={`max-w-md mx-auto p-4 ${isDarkMode ? 'bg-gray-800 text-white' : 'bg-white text-gray-700'} rounded-2xl shadow-md space-y-6 mt-10`}>
                 <div className="mb-4">
                     <label className="block ">Nombre</label>
@@ -47,12 +44,8 @@ const Register = () => {
                 >
                     iniciar sesion 
                 </button>
-
             </form>
-
         </div>
-        
-        
     );
 };
 

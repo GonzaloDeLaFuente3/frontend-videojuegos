@@ -54,20 +54,20 @@ export const VideojuegoProvider = ({ children }) => {
           totalVideojuegos = parseInt(headerCount, 10);// Convertir a número entero
           if (isNaN(totalVideojuegos)) {// Verificar si es un número válido
               console.error('Header x-total-count no es número válido:', headerCount);
-              totalVideojuegos = response.data.length; // Fallback al conteo de elementos. 
+              totalVideojuegos = response.data.length; // Fallback al conteo de elementos. fallback es una opción de seguridad
           }
       } else {
           console.warn('Header x-total-count no presente en la respuesta');// Manejar el caso donde el header no está presente
           totalVideojuegos = response.data.length; // Fallback al conteo de elementos
       }
-
       setVideojuegos(response.data);// Actualizar el estado de videojuegos con los datos obtenidos
-      setTotalPaginas(Math.ceil(totalVideojuegos / 10));// Calcular el total de páginas y actualizar el estado
+      setTotalPaginas(Math.ceil(totalVideojuegos / 10));// Calcular el total de páginas y actualizo el estado
     } catch (error) {
       console.error('Error al obtener los videojuegos:', error);
     }
   };
 
+  // useEffect para obtener los videojuegos al cargar el componente o cuando cambian los filtros, token o perfil
   useEffect(() => {
     if (perfil) {
       fetchVideojuegos(paginaActual);// Llamar a la función para obtener los videojuegos al cargar el componente

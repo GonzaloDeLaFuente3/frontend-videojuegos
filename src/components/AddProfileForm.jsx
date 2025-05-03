@@ -4,14 +4,14 @@ import { useAuth } from '../context/AuthContext';
 import api from '../services/api.mjs';
 import { toast } from 'react-toastify'; // importo toast
 
-const AddProfileForm = ({ profileToEdit, onSuccess }) => {
+const AddProfileForm = ({ profileToEdit, onSuccess }) => {// Se recibe el perfil a editar y una función de éxito como props
     const { register: registerProfile, handleSubmit, setValue, reset } = useForm();// Se utiliza para manejar el formulario de creación/ edicion de perfil
     const { token, usuario } = useAuth(); // Se obtiene el token y el usuario del contexto de autenticación
     const [error, setError] = useState(null);// Estado para manejar errores
 
     useEffect(() => {
         if (profileToEdit) {
-            setValue('apodo', profileToEdit.apodo);
+            setValue('apodo', profileToEdit.apodo);// Se establece el valor del apodo en el formulario
             setValue('tipo', profileToEdit.tipo);
             setValue('edad', profileToEdit.edad);
             setValue('avatar', profileToEdit.avatar);
@@ -58,9 +58,7 @@ const AddProfileForm = ({ profileToEdit, onSuccess }) => {
                 );
                 toast.success('Perfil creado correctamente'); // Mensaje de éxito
             }
-            
             if (onSuccess) onSuccess();
-            
         } catch (err) {
             console.error('Error al guardar el perfil:', err);
             setError(err.response?.data?.msg || err.message);
@@ -77,7 +75,7 @@ const AddProfileForm = ({ profileToEdit, onSuccess }) => {
             <div className="space-y-2">
                 <label className="block text-sm font-medium">Apodo</label>
                 <input
-                    {...registerProfile('apodo')}
+                    {...registerProfile('apodo')}// Se registra el campo apodo
                     type="text"
                     className="w-full  border border-gray-700 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500 transition"
                 />

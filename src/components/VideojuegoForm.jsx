@@ -8,7 +8,7 @@ import { ThemeContext } from '../context/ThemeContext'; // Importa el contexto d
 
 const VideojuegoForm = () => {
   const { isDarkMode } = useContext(ThemeContext); // Obtenemos el estado del tema oscuro
-  const { register, handleSubmit, setValue, formState: { errors, isSubmitting } } = useForm();// para manejar el formulario, validaciones y errores
+  const { register, handleSubmit, setValue, formState: { errors, isSubmitting } } = useForm();// Manejo del formulario
   const { crearVideojuego, actualizarVideojuego, videojuegos } = useVideojuego();// para acceder a las funciones de crear y actualizar videojuegos
   const navigate = useNavigate();
   const { id } = useParams();// para obtener el ID del videojuego desde la URL
@@ -33,7 +33,6 @@ const VideojuegoForm = () => {
   }, [id, videojuegos, setValue]);// se ejecuta cuando cambia el ID, la lista de videojuegos o la función setValue
 
   const onSubmit = async (data) => {// función que se ejecuta al enviar el formulario
-
     if (!perfil) {
       Swal.fire('Error', 'Perfil no definido', 'error');
       return;
@@ -53,7 +52,6 @@ const VideojuegoForm = () => {
         await crearVideojuego(datos);
         Swal.fire('Creado', 'El videojuego fue creado correctamente.', 'success');
       }
-
       navigate(`/catalogo/${perfil._id}`, { state: { profile: perfil } });// redirige al catálogo de videojuegos
     } catch (error) {
       console.error(error);
@@ -64,8 +62,6 @@ const VideojuegoForm = () => {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className={`max-w-2xl mx-auto  p-6 rounded-2xl shadow-lg mt-6 ${isDarkMode ? 'text-white' : 'text-black'} ${isDarkMode ? 'bg-gray-800 text-white' : 'bg-white text-gray-700'}`}>
       <h2 className="text-2xl font-bold mb-6 text-center text-blue-600">{isEditing ? 'Editar' : 'Crear'} Videojuego</h2>
-
-
 
       {[// mapea los campos del formulario
         { name: 'titulo', label: 'Título', type: 'text' },
@@ -81,7 +77,7 @@ const VideojuegoForm = () => {
           <input
             id={name}
             type={type}
-            {...register(name, { required })}
+            {...register(name, { required })}// registra el campo con la validación requerida
             className={`w-full px-4 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 ${
               errors[name] ? 'border-red-500 focus:ring-red-300' : 'border-gray-300 focus:ring-blue-300'
             }`}

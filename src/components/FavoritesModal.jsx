@@ -1,11 +1,10 @@
-// src/components/FavoritesModal.jsx
 import React from 'react';
 import { Gamepad2, X, Trash2 } from 'lucide-react';
 import { useFavorites } from '../context/FavoritesContext';
 import { useContext } from 'react';
 import { ThemeContext } from '../context/ThemeContext'; // Importa el contexto de tema
 
-const FavoritesModal = ({ perfil, onClose }) => {
+const FavoritesModal = ({ perfil, onClose }) => {// recibe el perfil y una función para cerrar el modal como props
     const { isDarkMode } = useContext(ThemeContext); // Obtenemos el estado del tema oscuro
     const { getFavorites, removeFromFavorites } = useFavorites();//  Obtenemos las funciones del contexto de favoritos
     const favorites = getFavorites(perfil?._id); //  Obtenemos los videojuegos favoritos del perfil actual
@@ -45,7 +44,7 @@ const FavoritesModal = ({ perfil, onClose }) => {
                             src={videojuego.imgUrl}
                             alt={videojuego.titulo}
                             className="w-24 h-24 object-cover rounded-lg flex-shrink-0"
-                            onError={(e) => {
+                            onError={(e) => {// Si la imagen no carga, se muestra una imagen de marcador de posición
                                 e.target.src = 'https://via.placeholder.com/96';
                             }}
                             />

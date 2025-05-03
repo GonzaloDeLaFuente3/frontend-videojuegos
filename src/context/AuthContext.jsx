@@ -7,20 +7,19 @@ const AuthContext = createContext();// Crea el contexto de autenticación
 // eslint-disable-next-line react-refresh/only-export-components
 export const useAuth = () => useContext(AuthContext);
 
-export const AuthProvider = ({ children }) => {
-    const [token, setToken] = useState(localStorage.getItem('token') || null);
-    const [usuario, setUsuario] = useState(JSON.parse(localStorage.getItem('usuario')) || null);
+export const AuthProvider = ({ children }) => {// Proveedor del contexto de autenticación
+    const [token, setToken] = useState(localStorage.getItem('token') || null);// Inicializa el token desde localStorage o como null
+    const [usuario, setUsuario] = useState(JSON.parse(localStorage.getItem('usuario')) || null);// Inicializa el usuario desde localStorage o como null
     const navigate = useNavigate();
 
     const login = async (email, password) => {
         try {
             const response = await api.post('/auth/login', { email, password });
-            console.log(response.data);
-            setToken(response.data.token);
-            setUsuario(response.data.usuario);
-            localStorage.setItem('token', response.data.token);
-            localStorage.setItem('usuario', JSON.stringify(response.data.usuario));
-            navigate('/perfiles');// Redirige a la página de inicio después de iniciar sesión
+            setToken(response.data.token);// Guarda el token en el estado
+            setUsuario(response.data.usuario);// Guarda el usuario en el estado
+            localStorage.setItem('token', response.data.token);// Guarda el token en localStorage
+            localStorage.setItem('usuario', JSON.stringify(response.data.usuario));// Guarda el usuario en localStorage
+            navigate('/perfiles');// Redirige a la página perfiles después de iniciar sesión
         } catch (error) {
             console.error('Error logging in:', error);
             throw error;

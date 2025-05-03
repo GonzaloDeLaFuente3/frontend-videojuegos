@@ -5,7 +5,6 @@ import { createContext, useState, useEffect } from "react";
 export const ThemeContext = createContext();
 
 //defino componente proveedor que envuelve toda la aplicacion, permite que se acceda al contexto
-
 export const ThemeProvider = ({ children }) => {//children prop especial que representa los componentes hijos dentro de Provider
     
     //obtengo el estado del localstorage

@@ -11,11 +11,11 @@ const Login = () => {
 
     const navigate = useNavigate(); // Inicializa el hook useNavigate para redirigir al usuario
 
-    const { register, handleSubmit, formState: { errors } } = useForm(); //  Capturamos errores
+    const { register, handleSubmit, formState: { errors } } = useForm(); //  Manejo del formulario de inicio de sesión
     const { login } = useAuth();//  Obtenemos la función de inicio de sesión del contexto de autenticación
     const [error, setError] = useState(null);//  Estado para manejar errores de inicio de sesión
 
-    const onSubmit = async (data) => {
+    const onSubmit = async (data) => {//  Función que se ejecuta al enviar el formulario. Recibe los datos del formulario como argumento
         setError(null);//  Reiniciamos el error antes de intentar iniciar sesión
         try {
             await login(data.email, data.password);//  Llamamos a la función de inicio de sesión con el correo y la contraseña proporcionados
@@ -75,7 +75,6 @@ const Login = () => {
             >
                 Registrar nuevo usuario
             </button>
-
         </form>
     );
 };

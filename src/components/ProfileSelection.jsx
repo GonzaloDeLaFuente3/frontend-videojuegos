@@ -10,10 +10,10 @@ import api from '../services/api.mjs';
 import { useAuth } from '../context/AuthContext';
 import Swal from 'sweetalert2';
 
-const ProfileSelection = ({ profiles, refreshProfiles   }) => {
+const ProfileSelection = ({ profiles, refreshProfiles   }) => {// Se recibe la lista de perfiles y una función para refrescar la lista como props
     const { isDarkMode } = useContext(ThemeContext); // Obtenemos el estado del tema oscuro
     const { token } = useAuth();
-    const [editingProfile, setEditingProfile] = useState(null);
+    const [editingProfile, setEditingProfile] = useState(null);// Estado para el perfil que se está editando
     const [selectedProfile, setSelectedProfile] = useState(null);// Estado para el perfil seleccionado
     const [showAddFormModal, setShowAddFormModal] = useState(false);// Estado para mostrar el modal de agregar perfil
 
@@ -32,7 +32,6 @@ const ProfileSelection = ({ profiles, refreshProfiles   }) => {
 
     const handleDeleteProfile = async (profileId, e) => {
         e.stopPropagation();
-        
         const result = await Swal.fire({
             title: '¿Eliminar perfil?',
             text: 'Esta acción no se puede deshacer.',
@@ -43,7 +42,6 @@ const ProfileSelection = ({ profiles, refreshProfiles   }) => {
             confirmButtonText: 'Sí, eliminar',
             cancelButtonText: 'Cancelar',
         });
-
         if (result.isConfirmed) {
             try {
                 await api.delete(`/perfiles/eliminar/${profileId}`, {
@@ -52,7 +50,7 @@ const ProfileSelection = ({ profiles, refreshProfiles   }) => {
                     }
                 });
                 toast.success('Perfil eliminado exitosamente');
-                refreshProfiles(); // Actualiza la lista de perfiles
+                refreshProfiles(); // Actualizo la lista de perfiles
             } catch (error) {
                 console.error('Error al eliminar perfil:', error);
                 toast.error('Error al eliminar el perfil');
@@ -61,8 +59,8 @@ const ProfileSelection = ({ profiles, refreshProfiles   }) => {
     };
 
     const handleFormSuccess = () => {
-        setShowAddFormModal(false);
-        setEditingProfile(null);
+        setShowAddFormModal(false);// Cierra el modal después de agregar o editar un perfil
+        setEditingProfile(null);// Reinicia el perfil en edición
         refreshProfiles(); // Actualiza la lista de perfiles
     };
 
@@ -120,7 +118,6 @@ const ProfileSelection = ({ profiles, refreshProfiles   }) => {
                         )}
                     </div>
 
-
                     {profile.avatar ? (
                         <img
                             src={profile.avatar}
@@ -139,10 +136,9 @@ const ProfileSelection = ({ profiles, refreshProfiles   }) => {
 
                 {/* Tarjeta Agregar Perfil */}
                 <div
-                onClick={() => setShowAddFormModal(true)}
+                onClick={() => setShowAddFormModal(true)}// Abre el modal para agregar un nuevo perfil
                 className={`group p-6 rounded-2xl shadow-md hover:shadow-xl cursor-pointer flex flex-col items-center justify-center transition-transform transform hover:scale-105 ${isDarkMode ? 'bg-gray-600 text-white' : 'bg-gray-400 text-black'}`}
                 >
-
                     <div className="w-24 h-24 rounded-full bg-blue-500 text-white flex items-center justify-center mb-4">
                         <Plus size={48} />
                     </div>
@@ -152,6 +148,7 @@ const ProfileSelection = ({ profiles, refreshProfiles   }) => {
 
             {/* Catálogo de videojuegos si seleccionan perfil */}
             <div className="w-full mt-10">
+                {/* // Si hay un perfil seleccionado, muestra el catálogo de videojuegos */}
                 {selectedProfile && <VideojuegoCatalogo perfil={selectedProfile} />}
             </div>
 
@@ -169,7 +166,7 @@ const ProfileSelection = ({ profiles, refreshProfiles   }) => {
 
                         {/* // Formulario para agregar perfil */}
                         <AddProfileForm 
-                            profileToEdit={editingProfile} 
+                            profileToEdit={editingProfile} // Pasa el perfil a editar si existe
                             onSuccess={handleFormSuccess} 
                         />
                     </div>

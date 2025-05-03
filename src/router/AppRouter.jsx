@@ -6,23 +6,21 @@ import ProtectedRoute from './ProtectedRoute';
 import { AuthProvider } from '../context/AuthContext';
 import ProfilesPage from '../pages/ProfilesPage';
 import CatalogoPage from '../pages/CatalogoPage';
-
 import VideojuegoForm from '../components/VideojuegoForm';
 import {VideojuegoProvider} from '../context/VideojuegoContext';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
-
-
 import { FavoritesProvider } from '../context/FavoritesContext';
-
 import { Navigate } from 'react-router-dom';
-
 
 const AppRouter = () => {
     return (
         <Router>
+            {/* // Proveedor de contexto para la autenticación */}
             <AuthProvider>
+                {/* // Proveedor de contexto para los videojuegos */}
                 <VideojuegoProvider>
+                    {/* // Proveedor de contexto para los favoritos */}
                     <FavoritesProvider>
                         <Header />
 
@@ -49,7 +47,6 @@ const AppRouter = () => {
                                 }
                             />
 
-
                             <Route
                                 path="/videojuegos/crear"
                                 element={
@@ -66,8 +63,6 @@ const AppRouter = () => {
                                     </ProtectedRoute>
                                 }
                             />
-                            
-
                         </Routes>
                         
                         <Footer />
